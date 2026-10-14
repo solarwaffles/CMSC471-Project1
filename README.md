@@ -1,4 +1,5 @@
-https://zcliu.github.io/teaching/CMSC471/assignments/A1-interactive.html
+Project Description: https://zcliu.github.io/teaching/CMSC471/assignments/A1-interactive.html
+Data Link: https://opportunityinsights.org/paper/collegeadmissions/
 
 Required elements
 1. Web-based Interactive visualization
