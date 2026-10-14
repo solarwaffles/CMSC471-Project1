@@ -1,3 +1,5 @@
+https://zcliu.github.io/teaching/CMSC471/assignments/A1-interactive.html
+
 Required elements
 1. Web-based Interactive visualization
 The goal is not to create an overwhelming visualization but a focused, elegant, and intuitive design. You will implement at least one interaction from each category:
