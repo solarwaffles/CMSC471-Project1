@@ -1,3 +1,17 @@
+# College Access Explorer
+
+Interactive D3 dashboard for CMSC471 Project 1.
+
+- Open `index.html` directly for the complete, self-contained dashboard.
+- Editable source and bundled datasets are in `dist/`. Run `python3 -m http.server 8000 --directory dist` to develop locally.
+- Publish GitHub Pages from `main`, root folder, in repository Settings → Pages.
+- The scatterplot brush filters the home-state map, race bars, income donut, and college table.
+- The map defaults to selected-college entrants from each home state divided by its 2014 total resident population. This measures enrollment intensity, not an applicant acceptance rate.
+- Complete the webpage's team/process write-up with your actual contributions and people-hours before submitting.
+- Sources and methods appear on the webpage; dependency licenses are in `THIRD_PARTY_NOTICES.txt`.
+
+## Original assignment notes
+
 Project Description: https://zcliu.github.io/teaching/CMSC471/assignments/A1-interactive.html
 Data Link: https://opportunityinsights.org/paper/collegeadmissions/
 
@@ -44,3 +58,4 @@ Checklist
  - [ ] Include a brief write-up with references on your webpage.
  - [ ] Submit your webpage URL to Canvas-ELMS.
  - [ ] Submit a short demo video to Canvas-ELMS.
+
