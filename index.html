@@ -317,7 +317,14 @@
           aware of these systemic and economical issues which is what inspired
           us to create our visualizations from this data.
         </p>
-        <h2>Design Decision Rational</h2>
+        <h2>Why the years differ</h2>
+        <p>
+          The years for the graphs differ because the sources have different
+          dates. For example, admission rate is from 2013, race and ethnicity
+          are from Fall 2000, and parent income is for students born 1980–82.
+        </p>
+
+        <h2>Design Decision Rationale</h2>
         <p>
           We have chosen to create 4 visuals: a <strong>dot plot</strong>,
           <strong>map plot</strong>, <strong>bar plot</strong>, and
@@ -375,7 +382,9 @@
           enrollment on the x axis to allow for easy reading of the races and
           then the percentage the bar takes up. We had these axis initially
           flipped, but since you read left to right we realized it was better to
-          have the axis as they are now.
+          have the axis as they are now. Every bar is the same color on purpose, because the labels already name
+          each category and the length carries the value. The x-axis is labeled
+          with the share of undergraduate enrollment.
         </p>
         <p>
           Finally, for our fourth graph we wanted to show the breakdown of the
@@ -408,6 +417,11 @@
           We also used Claude (Anthropic's Claude Code) later on to fix issues
           with our graphs, such as the tooltip getting stuck open and the race
           bar chart colors and axis label.
+        </p>
+
+        <h2>How the page loads its data</h2>
+        The data is static, the python scripts were run locally in order to process the data. 
+        <p>
         </p>
       </section>
       <footer>
