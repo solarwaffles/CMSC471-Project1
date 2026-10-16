@@ -134,31 +134,6 @@ h1 {
   margin: 6px 0 0;
   line-height: 1.7;
 }
-.data-note {
-  display: flex;
-  gap: 12px;
-  border: 1px solid #d4e5e7;
-  background: #edf4f5;
-  padding: 13px 17px;
-  border-radius: 6px;
-  margin-bottom: 27px;
-  font-size: 12px;
-  color: #40606a;
-}
-.data-note p {
-  margin: 0;
-}
-.note-icon {
-  margin-top: 2px;
-  flex: 0 0 18px;
-  height: 18px;
-  border: 1px solid #91b3b7;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 17px;
-  font-size: 12px;
-  font-weight: bold;
-}
 .filters {
   display: flex;
   align-items: flex-end;
@@ -710,9 +685,6 @@ footer span:first-child {
   }
   h1 {
     font-size: 36px;
-  }
-  .data-note {
-    font-size: 11px;
   }
   .filters {
     padding: 16px;
