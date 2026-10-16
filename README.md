@@ -51,11 +51,11 @@ Deploy your visualization on a publicly accessible webpage. There are several wa
 The main purpose of this video is to provide a timestamp for your project demo (to prevent major changes after the deadline). It doesn’t need to be polished or have a professional voiceover, but it should be short (a few minutes), functional, and clearly showcase the features you’ve implemented. A casual voiceover is encouraged but not required.
 
 Checklist
- - [ ] Register your team on Canvas (use A1 groups).
+ - [x] Register your team on Canvas (use A1 groups).
  - [ ] Design an interactive visualization (could multiple smaller visualizations) with required interaction techniques.
- - [ ] Deploy your visualization on as a webpage.
+ - [x] Deploy your visualization on as a webpage.
  - [ ] Make sure your visualization has labels and captions.
- - [ ] Include a brief write-up with references on your webpage.
+ - [x] Include a brief write-up with references on your webpage.
  - [ ] Submit your webpage URL to Canvas-ELMS.
  - [ ] Submit a short demo video to Canvas-ELMS.
 
