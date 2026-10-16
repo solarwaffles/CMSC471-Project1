@@ -781,44 +781,6 @@ footer span:first-child {
   }
 }
 
-.keyboard-ranges {
-  margin-top: 14px;
-  font-size: 10px;
-  color: var(--muted);
-}
-.keyboard-ranges summary {
-  cursor: pointer;
-  color: var(--accent);
-}
-.range-fields {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-top: 10px;
-}
-.range-field {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.range-field > span {
-  flex-basis: 100%;
-  font-weight: 700;
-}
-.range-field label {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.range-field input {
-  width: 58px;
-  padding: 4px;
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  font-size: 10px;
-  color: var(--ink);
-}
 .income-panel,
 .parallel-panel {
   grid-column: 1/-1;
@@ -961,17 +923,6 @@ footer span:first-child {
   font-size: 21px;
   color: var(--ink);
 }
-.range-fields {
-  grid-template-columns: repeat(3, 1fr);
-}
-.range-field input {
-  width: 70px;
-  padding: 6px;
-  font-size: 11px;
-}
-.keyboard-ranges summary {
-  font-size: 11px;
-}
 .roster tbody tr:focus {
   outline: 2px solid var(--accent);
   outline-offset: -2px;
@@ -1016,9 +967,6 @@ footer span:first-child {
   }
   .income-side .income-legend {
     gap: 9px;
-  }
-  .range-fields {
-    grid-template-columns: 1fr;
   }
   .college-detail {
     padding: 13px;
@@ -1192,13 +1140,6 @@ footer span:first-child {
 .scatter-panel .college-dot.outside-selection {
   fill-opacity: 0.32;
 }
-.scatter-panel .range-fields {
-  grid-template-columns: 1fr 1fr;
-  max-width: 600px;
-}
-.scatter-panel .keyboard-ranges {
-  margin-bottom: 12px;
-}
 .scatter-panel .college-detail {
   margin-top: 13px;
 }
@@ -1210,9 +1151,6 @@ footer span:first-child {
   .scatter-panel .line-legend {
     font-size: 10px;
     gap: 10px;
-  }
-  .scatter-panel .range-fields {
-    grid-template-columns: 1fr;
   }
   .scatter-panel .college-dot {
     r: 4.5;

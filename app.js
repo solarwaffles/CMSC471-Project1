@@ -14,7 +14,7 @@ const raceNames = [
   "International",
   "Other / unreported",
 ];
-const raceColors = ["#147d85", "#147d85", "#147d85", "#7b959d", "#b4c3ca"];
+const raceColor = "#147d85";
 const groupNames = {
   ivy: "Ivy-Plus",
   all: "All selective colleges",
@@ -108,7 +108,6 @@ const selection = {
   query: "",
   brushes: {},
   regions: {},
-  manualRanges: {},
   highlighted: null,
   pinned: null,
 };
@@ -127,7 +126,9 @@ const goodNumber = (v) => Number.isFinite(v);
 const formatPct = (v) => (goodNumber(v) ? pct(v) : "—");
 const formatRatio = (v) => (goodNumber(v) ? decimal(v) + "×" : "—");
 
+let tipOwner = null;
 function showTip(event, title, lines) {
+  tipOwner = event.currentTarget || null;
   tip.replaceChildren();
   const heading = document.createElement("strong");
   heading.textContent = title;
@@ -160,10 +161,38 @@ function showTip(event, title, lines) {
 }
 function hideTip() {
   tip.hidden = true;
+  tipOwner = null;
 }
+function tipAllowed(event) {
+  if (event.type !== "focus") return true;
+  try {
+    return event.target.matches(":focus-visible");
+  } catch (e) {
+    return true;
+  }
+}
+window.addEventListener("scroll", hideTip, { passive: true, capture: true });
+window.addEventListener("blur", hideTip);
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") hideTip();
+});
+document.addEventListener(
+  "pointermove",
+  (event) => {
+    if (
+      !tip.hidden &&
+      tipOwner &&
+      event.pointerType === "mouse" &&
+      !tipOwner.contains(event.target)
+    )
+      hideTip();
+  },
+  { passive: true },
+);
 function markEvents(marks, contents) {
   return marks
     .on("pointerenter focus", (event, d) => {
+      if (!tipAllowed(event)) return;
       const c = contents(d);
       showTip(event, c.title, c.lines);
     })
@@ -222,7 +251,6 @@ function setHighlight(id) {
 function clearRanges() {
   selection.brushes = {};
   selection.regions = {};
-  selection.manualRanges = {};
 }
 function stateChosen(abbreviation) {
   selection.state = abbreviation || null;
@@ -230,6 +258,7 @@ function stateChosen(abbreviation) {
   update(false);
 }
 function update(redrawParallel = false) {
+  hideTip();
   const group = schools.filter(groupMatches);
   candidates = group;
   selected = candidates.filter(passesBrush);
@@ -502,7 +531,7 @@ function drawRace() {
   }));
   const width = 550,
     height = 300,
-    margin = { top: 7, right: 48, bottom: 38, left: 151 };
+    margin = { top: 7, right: 48, bottom: 58, left: 151 };
   const svg = svgAt(
     "race",
     width,
@@ -555,7 +584,7 @@ function drawRace() {
     .attr("y", (d) => y(d.name))
     .attr("width", (d) => x(d.value) - margin.left)
     .attr("height", y.bandwidth())
-    .attr("fill", (d) => raceColors[d.index])
+    .attr("fill", (d) => raceColor)
     .attr("rx", 2)
     .attr("tabindex", 0)
     .attr(
@@ -583,6 +612,13 @@ function drawRace() {
     .attr("font-size", 12)
     .attr("font-weight", 700)
     .text((d) => pct(d.value));
+  svg
+    .append("text")
+    .attr("class", "scatter-axis-label")
+    .attr("text-anchor", "middle")
+    .attr("x", (margin.left + width - margin.right) / 2)
+    .attr("y", height - 10)
+    .text("Share of undergraduate enrollment (%) · Fall 2000");
 }
 
 function incomeAggregate(rows) {
@@ -708,9 +744,6 @@ function recomputeRanges() {
       ];
     else ranges[key] = range;
   }
-  Object.entries(selection.manualRanges).forEach(([key, range]) =>
-    merge(key, range),
-  );
   Object.values(selection.regions).forEach((region) =>
     Object.entries(region).forEach(([key, range]) => merge(key, range)),
   );
@@ -834,7 +867,6 @@ function drawScatter() {
         } else delete selection.regions[plot.id];
         recomputeRanges();
         update(false);
-        syncRangeInputs();
       });
     const brushGroup = svg.append("g").attr("class", "brush").call(brush);
     brushControls[plot.id] = { brush, group: brushGroup, x, y };
@@ -858,6 +890,7 @@ function drawScatter() {
           `${s.name}. Lowest-income enrollment share ${pct(s.bottom20)}, highest-income share ${pct(s.top20)}, admission rate ${pct(s.admitRate)}. Activate to show details.`,
       )
       .on("pointerenter focus", (event, s) => {
+        if (!tipAllowed(event)) return;
         setHighlight(s.id);
         const c = collegeTip(s);
         showTip(event, c.title, c.lines);
@@ -908,7 +941,6 @@ function drawScatter() {
         .attr("fill", "#5d707f")
         .text("No colleges with data in this selection.");
   });
-  buildRangeInputs();
   updateLines();
   // Restore the visual rectangle when redrawing after a viewport resize.
   for (const plot of plotDefinitions) {
@@ -991,85 +1023,6 @@ function updateBrushSummary() {
   $("brush-summary").classList.toggle("has-selection", active);
   $("clear-brush").disabled = !active;
 }
-function buildRangeInputs() {
-  let details = $("keyboard-ranges");
-  if (!details) {
-    details = document.createElement("details");
-    details.id = "keyboard-ranges";
-    details.className = "keyboard-ranges";
-    const summary = document.createElement("summary");
-    summary.textContent = "Or filter by exact percentages";
-    details.append(summary);
-    document.querySelector(".parallel-panel .line-legend").after(details);
-  }
-  details.querySelector(".range-fields")?.remove();
-  const fields = document.createElement("div");
-  fields.className = "range-fields";
-  dimensions
-    .filter((d) => d.key !== "top20")
-    .forEach((d) => {
-      const container = document.createElement("div");
-      container.className = "range-field";
-      const title = document.createElement("span");
-      title.textContent = d.title[0] + " (%)";
-      container.append(title);
-      ["min", "max"].forEach((bound) => {
-        const label = document.createElement("label");
-        label.textContent = bound;
-        const input = document.createElement("input");
-        input.id = `range-${d.key}-${bound}`;
-        input.type = "number";
-        input.step = ".1";
-        input.min = "0";
-        input.max = String(scales[d.key].domain()[1] * 100);
-        input.placeholder = "Any";
-        input.setAttribute("aria-label", `${d.title.join(" ")} ${bound}`);
-        input.addEventListener("change", () => {
-          const low = $(`range-${d.key}-min`),
-            high = $(`range-${d.key}-max`);
-          if (low.value === "" && high.value === "")
-            delete selection.manualRanges[d.key];
-          else {
-            const domain = scales[d.key].domain();
-            const a = Math.max(
-              domain[0],
-              Math.min(
-                domain[1],
-                low.value === "" ? domain[0] : +low.value / 100,
-              ),
-            );
-            const b = Math.max(
-              a,
-              Math.min(
-                domain[1],
-                high.value === "" ? domain[1] : +high.value / 100,
-              ),
-            );
-            selection.manualRanges[d.key] = [a, b];
-          }
-          recomputeRanges();
-          update(false);
-          syncRangeInputs();
-        });
-        label.append(input);
-        container.append(label);
-      });
-      fields.append(container);
-    });
-  details.append(fields);
-  syncRangeInputs();
-}
-function syncRangeInputs() {
-  dimensions.forEach((d) => {
-    const range = selection.manualRanges[d.key];
-    ["min", "max"].forEach((bound, i) => {
-      const input = $(`range-${d.key}-${bound}`);
-      if (input && document.activeElement !== input)
-        input.value = range ? decimal(range[i] * 100) : "";
-    });
-  });
-}
-
 function drawTable() {
   const rows = [...selected].sort((a, b) => a.name.localeCompare(b.name));
   $("roster-count").textContent =

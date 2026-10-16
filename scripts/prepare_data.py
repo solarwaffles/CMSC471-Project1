@@ -3,8 +3,8 @@ import csv
 import json
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
-DATA = ROOT / 'dist' / 'data'
+ROOT = Path(__file__).resolve().parent.parent
+DATA = ROOT / 'data'
 
 def read(name):
     with (DATA / name).open(newline='', encoding='utf-8-sig') as stream:
